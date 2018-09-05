@@ -1,48 +1,48 @@
 import React from 'react';
 import { ListItem } from './listItem';
 
+const uuidv1 = require('uuid/v1');
+
+var items = [{
+  itemValue: 'sell Apples',
+  itemId: 1
+}, {
+  itemValue: 'buy Microsoft',
+  itemId: 2
+}];
+
 class List extends React.Component {
   state = {
-    list: [
-      "Make a To Do Apps",
-      "Add to List via TextBox",
-      "Remove From List via Clicking Item"
-    ],
+    list: [items[0],items[1]],
     deleted: false,
-    added: false,
-    itemValue:"", 
+    added: false, 
+    newItem : {itemValue: "", itemId:uuidv1()}
   }
 
+  addListItem = (e) => {
+    console.log(this.state.newItem);
+     let currentList = this.state.list;
+     let toDoItem = this.state.newItem;
 
-  addListItem = () => {
-    let currentList = this.state.list;
-    let toDoItem = this.state.itemValue;
+     if (toDoItem.itemValue) {
+       currentList.push(toDoItem);
 
-    if (toDoItem) {
-      currentList.push(toDoItem);
-
-      this.state.itemValue = '';
+      this.state.newItem = {itemValue: "", itemId: uuidv1()};
+      console.log(this.state.newItem);
 
       this.setState({
-        list: currentList
-      });
-
-      this.state.deleted && this.setState({
-        deleted: false
-      });
-
-      !this.state.added && this.setState({
-        added: true
+        list: currentList, added: true, deleted:false
       });
     }
   }
 
   removeListItem = (listItem) => {
-    let currentListItem = listItem;
-    let updatedList = this.state.list.filter((listItem) => {
-      return currentListItem !== listItem;
-    });
-
+    console.log(listItem);
+     let currentListItem = listItem;
+     let updatedList = this.state.list.filter((listItem) => {
+       return currentListItem !== listItem;
+     });
+    
     this.setState({
       list: updatedList
     });
@@ -57,8 +57,8 @@ class List extends React.Component {
   }
   
   handleChange= (e) => {
-    //console.log(e.target.value);
-    this.setState({ itemValue: e.target.value });
+    console.log(this.state.newItem.itemId);
+    this.setState({ newItem: {itemId: this.state.newItem.itemId,itemValue:e.target.value} });
   }
 
   render() {
@@ -66,16 +66,16 @@ class List extends React.Component {
     let listLength = this.state.list.length;
 
     let listItems = this.state.list.map((listItem, i) => {
-      return <li key={listItem}> 
+      return <li key={listItem.itemId}> 
                 <button onClick={e => this.removeListItem(listItem)}>X</button>
-                {listItem}
+                {listItem.itemValue}
               </li>;
     });
 
     return (
       <div>
         <nav>
-          <input type="text" placeholder="Write a comment..." onChange={ this.handleChange } value={this.state.itemValue} />
+          <input value={this.state.newItem.itemValue} type="text" placeholder="Write a comment..." onChange={ this.handleChange }  />
           <button onClick={this.addListItem}>New Item</button>
         </nav>
         <p>{this.state.deleted && 'List Item Deleted!'}</p>
