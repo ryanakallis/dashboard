@@ -1,14 +1,13 @@
 import React from 'react';
-import List from './list';
 
-class Dash extends React.Component {
+class About extends React.Component {
   render() {
     return (
       <div>
-        <List/>
+        <h1>About Page</h1>
       </div>
     );
   }
 }
 
-export default Dash;
+export default About;

@@ -1,17 +1,13 @@
 import React from 'react';
 import Dash from './components/Dashboard';
+import About from './components/About';
+import Header from './components/header';
 
 class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Dash  />
-        {/* <h1>To Do List</h1>
-        <ul>
-          {this.props.list.map(function(listValue){
-            return <li>{listValue}</li>;
-          })}
-        </ul> */}
+        <Header/>         
       </div>
     );
   }

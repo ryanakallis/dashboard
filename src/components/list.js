@@ -4,22 +4,24 @@ import { ListItem } from './listItem';
 class List extends React.Component {
   state = {
     list: [
-      "Make a To Do App",
+      "Make a To Do Apps",
       "Add to List via TextBox",
       "Remove From List via Clicking Item"
     ],
     deleted: false,
-    added: false
+    added: false,
+    itemValue:"", 
   }
 
 
-  addListItem = (event) => {
-   let currentList = this.state.list;
-    let textBox = event.target.previousElementSibling;
+  addListItem = () => {
+    let currentList = this.state.list;
+    let toDoItem = this.state.itemValue;
 
-    if (textBox.value) {
-      currentList.push(textBox.value);
-      textBox.value = '';
+    if (toDoItem) {
+      currentList.push(toDoItem);
+
+      this.state.itemValue = '';
 
       this.setState({
         list: currentList
@@ -53,20 +55,27 @@ class List extends React.Component {
       added: false
     });
   }
+  
+  handleChange= (e) => {
+    //console.log(e.target.value);
+    this.setState({ itemValue: e.target.value });
+  }
 
   render() {
+    
+    let listLength = this.state.list.length;
+
     let listItems = this.state.list.map((listItem, i) => {
       return <li key={listItem}> 
                 <button onClick={e => this.removeListItem(listItem)}>X</button>
                 {listItem}
               </li>;
     });
-    
-    let listLength = this.state.list.length;
+
     return (
       <div>
         <nav>
-          <input type="text" placeholder="Write a comment..." />
+          <input type="text" placeholder="Write a comment..." onChange={ this.handleChange } value={this.state.itemValue} />
           <button onClick={this.addListItem}>New Item</button>
         </nav>
         <p>{this.state.deleted && 'List Item Deleted!'}</p>
